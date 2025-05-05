@@ -17,16 +17,27 @@ const subscribeToGreeting = (observer: GreetingObserver) => {
 }
 const greetingObservable = new Observable(subscribeToGreeting);
 
-// Observer & Subscription
-const greetingObserver: GreetingObserver = {
+// Observers & Subscriptions
+const greetingObserver1: GreetingObserver = {
     next: (greeting: Greeting) => addItem(greeting),
     error: (err: any) => addItem(err),
     complete: () => addItem("Complete")
 }
-
-const greetingSubscription = greetingObservable.subscribe(greetingObserver);
+const greetingSubscription1 = greetingObservable.subscribe(greetingObserver1);
 
 setTimeout(() => {
-    greetingSubscription.unsubscribe();
+    greetingSubscription1.unsubscribe();
 }, 3001)
+
+
+const greetingObserver2: GreetingObserver = {
+    next: (greeting: Greeting) => addItem(greeting),
+    error: (err: any) => addItem(err),
+    complete: () => addItem("Complete")
+}
+const greetingSubscription2 = greetingObservable.subscribe(greetingObserver2);
+
+setTimeout(() => {
+    greetingSubscription2.unsubscribe();
+}, 5001)
 

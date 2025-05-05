@@ -1,26 +1,34 @@
-import {fromEvent, Observer} from 'rxjs';
+import {Subject} from 'rxjs';
 import {addItem} from "../helpers";
 
-// "HOT" OBSERVABLE
-//      Receives values as soon as it's instantiated, regardless of whether subscribers are listening.
-//      Doesn't emit values to subscribers until the subscription starts.
-const mouseMoveObservable = fromEvent(document, 'mousemove');
+// SUBJECT -> Can read and emit values, so it is both an Observable and Observer.
+const subject = new Subject();
 
-// OBSERVERS & SUBSCRIPTIONS
-//   Helpers
-const secondsPastCurrentMinute = () => new Date().getSeconds();
-const createObserver = (subscriberName: string): Observer<any> => {
-    return {
-        next: (event: any) => addItem(`${subscriberName}: (${secondsPastCurrentMinute()}s) ` + event),
-        error: (err: any) => addItem(`${subscriberName}: (${secondsPastCurrentMinute()}s) ` + err),
-        complete: () => addItem(`${subscriberName}: (${secondsPastCurrentMinute()}s) Complete`)
-    }
+// OBSERVER 1
+const observer1 = {
+    next: (data: any) => addItem('Observer 1: ' + data),
+    error: (err: any) => addItem('Observer 1: ' + err),
+    complete: () => addItem('Observer 1: Complete')
 }
+const subscription1 = subject.subscribe(observer1);
 
-//    Observers
-const mouseMoveObserver1: Observer<any> = createObserver('SUBSCRIBER 1');
+// PRODUCING EVENTS - ONLY GOES TO OBSERVER 1
+subject.next('The first thing has been sent');
 
-//    Subscriptions
-setTimeout(() => {
-    const subscription1 = mouseMoveObservable.subscribe(mouseMoveObserver1);
-}, 2000)
+// OBSERVER 2
+const observer2 = {
+    next: (data: any) => addItem('Observer 2: ' + data),
+    error: (err: any) => addItem('Observer 2: ' + err),
+    complete: () => addItem('Observer 2: Complete')
+}
+const subscription2 = subject.subscribe(observer2);
+
+// PRODUCING EVENTS - GO TO OBSERVERS 1 & 2
+subject.next('The second thing has been sent');
+subject.next('The third thing has been sent');
+
+// UNSUBSCRIBING OBSERVER 2
+subscription2.unsubscribe();
+
+// SENDING ANOTHER EVENT
+subject.next('The fourth thing has been sent');

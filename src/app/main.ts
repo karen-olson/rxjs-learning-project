@@ -1,18 +1,24 @@
-import {merge, Observable} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {addItem} from "../helpers";
 
-// OBSERVABLES
-const observable1 = new Observable((observer) => observer.next(1))
-const observable2 = new Observable((observer) => observer.next(2))
-const observable3 = merge(observable1, observable2);
+// PRODUCER
+const producer = (observer: any) => {
+    observer.next(1);
+    observer.next(2);
+    observer.next(3);
+    observer.complete();
+}
 
-// OBSERVERS
-const numberObserver1 = (number: number) => {addItem(`Observer 1: ${number}`)};
-const numberObserver2 = (number: number) => {addItem(`Observer 2: ${number}`)};
-const numberObserver3 = (number: number) => {addItem(`Observer 3: ${number}`)};
+// OBSERVER
+const numberObserver = {
+    next: (number: number) => addItem(number),
+    error: (err: any) => addItem(err),
+    complete: () => addItem('Complete')
+}
 
-// SUBSCRIPTIONS
-observable1.subscribe(numberObserver1); // Receives 1
-observable2.subscribe(numberObserver2); // Receives 2
-observable3.subscribe(numberObserver3); // Receives 1 & 2
-
+// OBSERVABLE, MAPPING, AND OBSERVER SUBSCRIPTION
+new Observable(producer)
+    .pipe(map((number: number) =>
+            number * 10
+        ))
+    .subscribe(numberObserver); // numberObserver receives 10, 20, 30

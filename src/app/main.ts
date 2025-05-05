@@ -1,8 +1,10 @@
-import {Subject} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {addItem} from "../helpers";
 
-// SUBJECT -> Can read and emit values, so it is both an Observable and Observer.
-const subject = new Subject();
+// BEHAVIOR SUBJECT
+//   -> Can read and emit values, so it is both an Observable and Observer.
+//   -> Subscribers get the last value emitted before their subscription started.
+const subject = new BehaviorSubject('Initial value');
 
 // OBSERVER 1
 const observer1 = {
@@ -14,6 +16,7 @@ const subscription1 = subject.subscribe(observer1);
 
 // PRODUCING EVENTS - ONLY GOES TO OBSERVER 1
 subject.next('The first thing has been sent');
+subject.next('Observers 1 & 2 will receive this value');
 
 // OBSERVER 2
 const observer2 = {

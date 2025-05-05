@@ -1,9 +1,9 @@
-import {Observable} from 'rxjs';
+import {Observable, share} from 'rxjs';
 import {addItem} from "../helpers";
 import {Greeting} from "../Messages";
 import {GreetingObserver} from "../GreetingObserver"
 
-// PRODUCER & COLD OBSERVABLE
+// PRODUCER & "WARM" OBSERVABLE
 //   Producer
 const produceGreetings = (observer: GreetingObserver) => {
     try {
@@ -16,8 +16,9 @@ const produceGreetings = (observer: GreetingObserver) => {
         observer.error(err)
     }
 }
-//    Cold Observable
-const greetingObservable = new Observable(produceGreetings);
+//    "Warm" Observable
+const greetingObservable = new Observable(produceGreetings)
+    .pipe(share());
 
 // OBSERVERS & SUBSCRIPTIONS
 //   Helpers

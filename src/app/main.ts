@@ -1,10 +1,10 @@
-import {BehaviorSubject} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 import {addItem} from "../helpers";
 
-// BEHAVIOR SUBJECT
+// REPLAY SUBJECT
 //   -> Can read and emit values, so it is both an Observable and Observer.
-//   -> Subscribers get the last value emitted before their subscription started.
-const subject = new BehaviorSubject('Initial value');
+//   -> Subscribers get the designated number of values emitted before their subscription started.
+const subject = new ReplaySubject(2);
 
 // OBSERVER 1
 const observer1 = {
@@ -14,9 +14,13 @@ const observer1 = {
 }
 const subscription1 = subject.subscribe(observer1);
 
-// PRODUCING EVENTS - ONLY GOES TO OBSERVER 1
-subject.next('The first thing has been sent');
-subject.next('Observers 1 & 2 will receive this value');
+// PRODUCING EVENTS
+//      Observer 1 receives things 1-4 because it was created before event emissions
+//      Observer 2 receives things 3 & 4 because of buffer size 2
+subject.next('Thing 1');
+subject.next('Thing 2');
+subject.next('Thing 3');
+subject.next('Thing 4');
 
 // OBSERVER 2
 const observer2 = {
@@ -26,12 +30,7 @@ const observer2 = {
 }
 const subscription2 = subject.subscribe(observer2);
 
-// PRODUCING EVENTS - GO TO OBSERVERS 1 & 2
-subject.next('The second thing has been sent');
-subject.next('The third thing has been sent');
-
-// UNSUBSCRIBING OBSERVER 2
-subscription2.unsubscribe();
-
-// SENDING ANOTHER EVENT
-subject.next('The fourth thing has been sent');
+// PRODUCING EVENTS
+//      Both observers receive thing 5 & 6
+subject.next('Thing 5');
+subject.next('Thing 6');

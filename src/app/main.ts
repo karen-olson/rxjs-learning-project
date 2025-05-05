@@ -8,16 +8,16 @@ const subscribeToGreeting = (observer: GreetingObserver) => {
     try {
         observer.next(Greeting.hello)
         observer.next(Greeting.howAreYou)
-        observer.next(Greeting.goodbye)
-        observer.complete()
-        observer.next(NotSent.willNotSend)
+        setInterval(() => {
+            observer.next(Greeting.notSoBad)
+        }, 1000)
     } catch (err) {
         observer.error(err)
     }
 }
 const greetingObservable = new Observable(subscribeToGreeting);
 
-// Observer
+// Observer & Subscription
 const greetingObserver: GreetingObserver = {
     next: (greeting: Greeting) => addItem(greeting),
     error: (err: any) => addItem(err),
@@ -25,4 +25,8 @@ const greetingObserver: GreetingObserver = {
 }
 
 const greetingSubscription = greetingObservable.subscribe(greetingObserver);
+
+setTimeout(() => {
+    greetingSubscription.unsubscribe();
+}, 3001)
 

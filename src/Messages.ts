@@ -1,6 +1,7 @@
 enum Greeting {
     hello = 'Hello!',
     howAreYou = 'How are you?',
+    notSoBad = 'Not so bad, and you?',
     goodbye = 'Goodbye!'
 }
 

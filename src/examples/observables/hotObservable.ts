@@ -1,5 +1,5 @@
 import {fromEvent, Observer} from 'rxjs';
-import {addItem} from "../helpers";
+import {addItem} from "../../helpers";
 
 // "HOT" OBSERVABLE
 //      Receives values as soon as it's instantiated, regardless of whether subscribers are listening.

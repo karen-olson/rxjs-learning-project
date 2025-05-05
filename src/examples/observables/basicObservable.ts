@@ -1,7 +1,7 @@
 import {Observable} from 'rxjs';
-import {addItem} from "../helpers";
-import {Greeting} from "../Messages";
-import {GreetingObserver} from "../GreetingObserver"
+import {addItem} from "../../helpers";
+import {Greeting} from "../../Messages";
+import {GreetingObserver} from "../../GreetingObserver"
 
 // PRODUCER & OBSERVABLE
 //   Producer
